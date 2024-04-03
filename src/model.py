@@ -1,22 +1,26 @@
 import lightning as L
 import torch
-from torch import Tensor, nn, optim, utils
-from torchvision.datasets import MNIST
-from torchvision.transforms import ToTensor
+from typing import Literal
 
 from src.loss import calculate_loss, calculate_outputs
 from src.mvnetwork import MVNetwork
+from src.training import TrainingConfig
 
+import torchvision.transforms as transforms
+from torchvision.models.video import (MC3_18_Weights, MViT_V1_B_Weights,
+                                      MViT_V2_S_Weights, R2Plus1D_18_Weights,
+                                      R3D_18_Weights, S3D_Weights, mvit_v1_b,
+                                      mvit_v2_s)
 
 class LitMVNNetwork(L.LightningModule):
-    def __init__(self, pre_model, pooling_type, criterion):
+    def __init__(self, pre_model, pooling_type, criterion, config: TrainingConfig):
         super().__init__()
         self.model = MVNetwork(net_name=pre_model, agr_type=pooling_type)
         # TODO - replace with config
-        self.LR = 0.01
-        self.weight_decay = 0.001
-        self.step_size = 3
-        self.gamma = 0.1
+        self.LR = config.LR
+        self.weight_decay = config.weight_decay
+        self.step_size = config.step_size
+        self.gamma = config.gamma
 
         self.criterion = criterion
         self.actions = {}
@@ -32,12 +36,42 @@ class LitMVNNetwork(L.LightningModule):
     def training_step(self, batch, batch_idx):
         targets_offence_severity, targets_action, mvclips, action = batch
         outputs_offence_severity, outputs_action, _ = self.model(mvclips)
-        print("x")
         outputs_offence_severity, outputs_action, actions = calculate_outputs(
             outputs_offence_severity, outputs_action, action, self.actions)
-        print("x")
         self.actions = actions
         loss = calculate_loss(self.criterion, outputs_offence_severity,
                               outputs_action, targets_offence_severity, targets_action)
-        print("x")
+        self.log("train_step_loss", loss.item(), on_step=True, on_epoch=False, prog_bar=True, logger=True)
+        self.log("train_epoch_loss", loss.item(), on_step=False, on_epoch=True, prog_bar=True, logger=True)
         return loss
+    
+    def validation_step(self, batch, batch_idx):
+        targets_offence_severity, targets_action, mvclips, action = batch
+        outputs_offence_severity, outputs_action, _ = self.model(mvclips)
+        outputs_offence_severity, outputs_action, actions = calculate_outputs(
+            outputs_offence_severity, outputs_action, action, self.actions)
+        self.actions = actions
+        loss = calculate_loss(self.criterion, outputs_offence_severity,
+                              outputs_action, targets_offence_severity, targets_action)
+        self.log("val_step_loss", loss.item(), on_step=True, on_epoch=False, prog_bar=True, logger=True)
+        self.log("val_epoch_loss", loss.item(), on_step=False, on_epoch=True, prog_bar=True, logger=True)
+        return loss
+    
+    def forward(self, mvclips: torch.Tensor) -> torch.Any:
+        mvclips = mvclips.to(self.device)
+        outputs_offence_severity, outputs_action, _ = self.model(mvclips)
+        return outputs_offence_severity, outputs_action, _
+
+def get_pre_model(pre_model: Literal["r3d_18", "s3d", "mc3_18", "r2plus1d_18", "mvit_v2_s"]):
+    if pre_model == "r3d_18":
+        transforms_model = R3D_18_Weights.KINETICS400_V1.transforms()
+    elif pre_model == "s3d":
+        transforms_model = S3D_Weights.KINETICS400_V1.transforms()
+    elif pre_model == "mc3_18":
+        transforms_model = MC3_18_Weights.KINETICS400_V1.transforms()
+    elif pre_model == "r2plus1d_18":
+        transforms_model = R2Plus1D_18_Weights.KINETICS400_V1.transforms()
+    elif pre_model == "mvit_v2_s":
+        transforms_model = MViT_V2_S_Weights.KINETICS400_V1.transforms()
+    
+    return transforms_model
