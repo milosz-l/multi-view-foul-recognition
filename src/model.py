@@ -45,18 +45,6 @@ class LitMVNNetwork(L.LightningModule):
         self.log("train_epoch_loss", loss.item(), on_step=False, on_epoch=True, prog_bar=True, logger=True)
         return loss
     
-    def validation_step(self, batch, batch_idx):
-        targets_offence_severity, targets_action, mvclips, action = batch
-        outputs_offence_severity, outputs_action, _ = self.model(mvclips)
-        outputs_offence_severity, outputs_action, actions = calculate_outputs(
-            outputs_offence_severity, outputs_action, action, self.actions)
-        self.actions = actions
-        loss = calculate_loss(self.criterion, outputs_offence_severity,
-                              outputs_action, targets_offence_severity, targets_action)
-        self.log("val_step_loss", loss.item(), on_step=True, on_epoch=False, prog_bar=True, logger=True)
-        self.log("val_epoch_loss", loss.item(), on_step=False, on_epoch=True, prog_bar=True, logger=True)
-        return loss
-    
     def forward(self, mvclips: torch.Tensor) -> torch.Any:
         mvclips = mvclips.to(self.device)
         outputs_offence_severity, outputs_action, _ = self.model(mvclips)
