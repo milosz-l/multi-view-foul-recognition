@@ -1,0 +1,11 @@
+ipykernel
+SoccerNet
+av
+torch
+torchvision
+python-dotenv
+lightning
+autopep8
+isort
+pydantic
+wandb
