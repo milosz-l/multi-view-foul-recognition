@@ -1,7 +1,7 @@
 .venv/
 data/
 lightning_logs/
-
+.env
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,linux,windows,jupyternotebooks,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,linux,windows,jupyternotebooks,python
