@@ -3,7 +3,7 @@ Soccernet - multi-view foul recognition - https://www.soccer-net.org/tasks/new-m
 
 ## Zespół
 - Adam Górski, 304054
-- Miłosz Łopatto, ...
+- Miłosz Łopatto, 305898
 
 ## Opis rozwiązania zadania
 
