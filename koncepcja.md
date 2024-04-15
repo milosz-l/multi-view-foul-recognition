@@ -51,7 +51,7 @@ Kolejną warstwą architektury jest agregator, który łączy ze sobą wyniki z 
 Ostatnia część architektury zwraca prawdopodobieństwa poszczególnych klas dla każdego z zadań. Tutaj na ten moment nie planujemy wprowadzać większych zmian i będziemy chcieli skupić się na optymalizacji dwóch pierwszych części architektury.
 
 ### Zbiór danych
-Zbiór danych pochodzi z konkursu Soccernet - zawiera ponad 2000 oanotowanych akcji, gdzie do każdej akcji jest od 2 do 5 klipów. Klipy są długości do 164 klatek i mają 24 klatki na sekundę. Zbiory testowe i ukryty mają po 250 klipów.
+Zbiór danych pochodzi z konkursu Soccernet - zawiera ponad 2000 akcji, gdzie do każdej akcji jest od 2 do 5 klipów. Klipy są długości do 164 klatek i mają 24 klatki na sekundę. Zbiory testowe i ukryty mają po 250 klipów.
 
 ### Narzędzia
 Rozwiązanie będzie zaimplementowane w Pythonie w wersji 3.11/3.10 z użyciem biblioteki torch, torchvision i pytorch lightning. Dodatkowo wyniki eksperymentów będą śledzone przy pomocy weights and biases.
