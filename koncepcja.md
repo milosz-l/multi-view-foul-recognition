@@ -52,5 +52,5 @@ Zbiór danych pochodzi z konkursu Soccernet - zawiera ponad 2000 oanotowanych ak
 Rozwiązanie będzie zaimplementowane w Pythonie w wersji 3.11/3.10 z użyciem biblioteki torch, torchvision i pytorch lightning. Dodatkowo wyniki eksperymentów będą śledzone przy pomocy weights and biases.
 
 ### Bibliografia
-1. Held, J., Cioppa, A., Giancola, S., Hamdi, A., Ghanem, B., & Van Droogenbroeck, M. (2023). VARS: Video Assistant Referee System for Automated Soccer Decision Making from Multiple Views. https://arxiv.org/abs/2304.04617
-2. Arnab, A., Dehghani, M., Heigold, G., Sun, C., Lučić, M., & Schmid, C. (2021). ViViT: A Video Vision Transformer. https://arxiv.org/abs/2103.15691
+1. [Held, J., Cioppa, A., Giancola, S., Hamdi, A., Ghanem, B., & Van Droogenbroeck, M. (2023). VARS: Video Assistant Referee System for Automated Soccer Decision Making from Multiple Views.](https://arxiv.org/abs/2304.04617)
+2. [Arnab, A., Dehghani, M., Heigold, G., Sun, C., Lučić, M., & Schmid, C. (2021). ViViT: A Video Vision Transformer.](https://arxiv.org/abs/2103.15691)
