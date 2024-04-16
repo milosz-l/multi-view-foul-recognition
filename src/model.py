@@ -39,6 +39,12 @@ class LitMVNNetwork(L.LightningModule):
         outputs_offence_severity, outputs_action, actions = calculate_outputs(
             outputs_offence_severity, outputs_action, action, self.actions)
         self.actions = actions
+        
+        if len(outputs_offence_severity.shape) == 1 and len(targets_offence_severity.shape) == 2:
+            outputs_offence_severity = outputs_offence_severity.reshape(targets_offence_severity.shape[0], -1)
+        if len(outputs_action.shape) == 1 and len(targets_action.shape) == 2:
+            outputs_action = outputs_action.reshape(targets_action.shape[0], -1)
+
         loss = calculate_loss(self.criterion, outputs_offence_severity,
                               outputs_action, targets_offence_severity, targets_action)
         self.log("train_step_loss", loss.item(), on_step=True, on_epoch=False, prog_bar=True, logger=True)
@@ -49,6 +55,24 @@ class LitMVNNetwork(L.LightningModule):
         mvclips = mvclips.to(self.device)
         outputs_offence_severity, outputs_action, _ = self.model(mvclips)
         return outputs_offence_severity, outputs_action, _
+    
+    def validation_step(self, batch, batch_idx):
+        targets_offence_severity, targets_action, mvclips, action = batch
+        outputs_offence_severity, outputs_action, _ = self.model(mvclips)
+        outputs_offence_severity, outputs_action, actions = calculate_outputs(
+            outputs_offence_severity, outputs_action, action, self.actions)
+        self.actions = actions
+        
+        if len(outputs_offence_severity.shape) == 1 and len(targets_offence_severity.shape) == 2:
+            outputs_offence_severity = outputs_offence_severity.reshape(targets_offence_severity.shape[0], -1)
+        if len(outputs_action.shape) == 1 and len(targets_action.shape) == 2:
+            outputs_action = outputs_action.reshape(targets_action.shape[0], -1)
+
+        loss = calculate_loss(self.criterion, outputs_offence_severity,
+                              outputs_action, targets_offence_severity, targets_action)
+        self.log("val_step_loss", loss.item(), on_step=True, on_epoch=False, prog_bar=True, logger=True)
+        self.log("val_epoch_loss", loss.item(), on_step=False, on_epoch=True, prog_bar=True, logger=True)
+        return loss
 
 def get_pre_model(pre_model: Literal["r3d_18", "s3d", "mc3_18", "r2plus1d_18", "mvit_v2_s"]):
     if pre_model == "r3d_18":
