@@ -105,3 +105,9 @@ To modify the attributes of a job:
 ```bash
 scontrol update JobId=job_id AttributeName=new_value  # Replace 'AttributeName' and 'new_value' appropriately
 ```
+
+### Additional Commands
+
+- **hpc-fs**: Manages and inspects the HPC file system. Usage: `hpc-fs`.
+- **hpc-jobs**: Manages and views the status of HPC jobs. Usage: `hpc-jobs`.
+- **du**: Estimates file space usage. Usage: `du -h --max-depth=1 $HOME | sort -rh`.
