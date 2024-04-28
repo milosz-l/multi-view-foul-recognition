@@ -1,10 +1,10 @@
 ipykernel==6.29.3
 SoccerNet==0.1.56
 av==12.0.0
-torch==2.2.1+cu118
-torchvision==0.17.1+cu118
+# torch==2.2.1+cu118 # comment if running on server
+# torchvision==0.17.1+cu118 # comment if running on server
 python-dotenv==1.0.1
 lightning==2.2.1
-autopep8==5.13.2
+autopep8
 pydantic==2.6.4
 wandb==0.16.5

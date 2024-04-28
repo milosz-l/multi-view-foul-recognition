@@ -47,8 +47,8 @@ class LitMVNNetwork(L.LightningModule):
 
         loss = calculate_loss(self.criterion, outputs_offence_severity,
                               outputs_action, targets_offence_severity, targets_action)
-        self.log("train_step_loss", loss.item(), on_step=True, on_epoch=False, prog_bar=True, logger=True)
-        self.log("train_epoch_loss", loss.item(), on_step=False, on_epoch=True, prog_bar=True, logger=True)
+        self.log("train_step_loss", loss.item(), on_step=True, on_epoch=False, prog_bar=False, logger=True)
+        self.log("train_epoch_loss", loss.item(), on_step=False, on_epoch=True, prog_bar=False, logger=True)
         return loss
     
     def forward(self, mvclips: torch.Tensor) -> torch.Any:

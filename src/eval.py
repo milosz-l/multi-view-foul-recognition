@@ -5,10 +5,10 @@ import os
 import json
 import gc
 from tqdm import tqdm
-
+from typing import Union
 
 def save_evaluation_file(dataloader,
-          model: torch.nn.Module | L.LightningModule,
+          model: Union[torch.nn.Module, L.LightningModule],
           set_name="test",
           output_dir="."
         ):
