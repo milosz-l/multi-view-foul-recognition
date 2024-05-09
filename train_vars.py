@@ -88,9 +88,9 @@ wand_logger = WandbLogger(log_model="all")
 os.makedirs("/net/tscratch/people/plgmiloszl/lightning_logs", exist_ok=True)
 
 
-checkpoint_callback = ModelCheckpoint(dirpath="/net/tscratch/people/plgmiloszl/lightning_log", every_n_epochs=1, every_n_train_steps=1)
+checkpoint_callback = ModelCheckpoint(dirpath="/net/tscratch/people/plgmiloszl/lightning_log")
 
-trainer = L.Trainer(limit_train_batches=64, limit_val_batches=24, max_epochs=num_epochs, logger=wand_logger, strategy="ddp", num_nodes=1, default_root_dir="/net/tscratch/people/plgmiloszl/lightning_log")
+trainer = L.Trainer(max_epochs=num_epochs, logger=wand_logger, strategy="ddp", num_nodes=1, default_root_dir="/net/tscratch/people/plgmiloszl/lightning_log")
 trainer.fit(model=model, train_dataloaders=train_loader, val_dataloaders=val_loader)
 
 os.makedirs(predictions_output_dir, exist_ok=True)
