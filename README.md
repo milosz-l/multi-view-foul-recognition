@@ -63,7 +63,13 @@ Run `download_data.sh` to download the data.
 source download_data.sh
 ```
 
-### Step 5: Submitting jobs to Slurm
+### Step 5: Set the wandb cache folder path to scratch instead of home
+We do this only for wandb, because its cache takes up much more space compared to other packages.
+```bash
+export WANDB_CACHE_DIR=/net/tscratch/people/$USER/.cache/wandb
+```
+
+### Step 6: Submitting jobs to Slurm
 To run experiments using the Slurm job scheduler, you can submit jobs as follows. Adjust the script and resource specifications according to your needs:
 ```bash
 sbatch -A plgzzsn2024-gpu-a100 -o slurm_%a.log -p plgrid-gpu-a100 -t 360 -c 4 --gres gpu:1 --mem 40G --nodes 1 run_train_vars.sh 
@@ -130,5 +136,6 @@ scontrol update JobId=job_id AttributeName=new_value  # Replace 'AttributeName' 
 You only need these to run experiments:
 ```bash
 cd /net/tscratch/people/$USER/multi-view-foul-recognition
+export WANDB_CACHE_DIR=/net/tscratch/people/$USER/.cache/wandb
 source sbatch.sh
 ```
