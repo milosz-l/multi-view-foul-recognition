@@ -1,5 +1,6 @@
 import lightning as L
 import torch
+import os
 
 
 from SoccerNet.Evaluation.MV_FoulRecognition import evaluate
@@ -48,8 +49,12 @@ wandb.init(
     config=training_config.model_dump()
 )
 
-path = "/net/tscratch/people/plgmiloszl/data"
-predictions_output_dir = "/net/tscratch/people/plgmiloszl/outputs"
+# Get the current username
+username = os.environ['USER']
+
+# Use the username to construct paths
+path = f"/net/tscratch/people/{username}/data"
+predictions_output_dir = f"/net/tscratch/people/{username}/outputs"
 
 transform_aug = get_augmentation(training_config.data_aug)
 transforms_model = get_pre_model(training_config.pre_model)
@@ -85,12 +90,12 @@ model = LitMVNNetwork(pre_model=pre_model, pooling_type=pooling_type, criterion=
 job_id = str(datetime.now())
 wand_logger = WandbLogger(log_model="all")
 
-os.makedirs("/net/tscratch/people/plgmiloszl/lightning_logs", exist_ok=True)
+os.makedirs(f"/net/tscratch/people/{username}/lightning_logs", exist_ok=True)
 
 
-checkpoint_callback = ModelCheckpoint(dirpath="/net/tscratch/people/plgmiloszl/lightning_log")
+checkpoint_callback = ModelCheckpoint(dirpath=f"/net/tscratch/people/{username}/lightning_log")
 
-trainer = L.Trainer(max_epochs=num_epochs, logger=wand_logger, strategy="ddp", num_nodes=1, default_root_dir="/net/tscratch/people/plgmiloszl/lightning_log")
+trainer = L.Trainer(max_epochs=num_epochs, logger=wand_logger, strategy="ddp", num_nodes=1, default_root_dir=f"/net/tscratch/people/{username}/lightning_log")
 trainer.fit(model=model, train_dataloaders=train_loader, val_dataloaders=val_loader)
 
 os.makedirs(predictions_output_dir, exist_ok=True)

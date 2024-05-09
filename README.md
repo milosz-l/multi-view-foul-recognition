@@ -1,6 +1,5 @@
 # multi-view-foul-recognition
 
-
 ## Generate pdf from markdown
 ```bash
 pandoc koncepcja.md -s -o koncepcja.pdf -V colorlinks=true
@@ -8,11 +7,14 @@ pandoc koncepcja.md -s -o koncepcja.pdf -V colorlinks=true
 
 ## Running experiments on Athena
 
+### Download data
+Run `download_data.py` to download the data.
+
 ### Activate Python virtual environment
 To ensure that all dependencies are correctly managed and isolated, activate the Python virtual environment using the following commands:
 ```bash
-python3.9 -m venv /net/tscratch/people/plgmiloszl/.venv
-source /net/tscratch/people/plgmiloszl/.venv/bin/activate
+python3.9 -m venv /net/tscratch/people/$USER/.venv
+source /net/tscratch/people/$USER/.venv/bin/activate
 ```
 
 ### Installing Requirements
@@ -44,13 +46,13 @@ deactivate  # For Python venv
 ### Check available storage
 Since the home directory is limited to 10GB, it's important to use the temporary storage directory for larger datasets or outputs. Check the contents and available space using:
 ```bash
-ls /net/tscratch/people/plgmiloszl/
+ls /net/tscratch/people/$USER/
 ```
 
 ### Submitting jobs to Slurm
 To run experiments using the Slurm job scheduler, you can submit jobs as follows. Adjust the script and resource specifications according to your needs:
 ```bash
-sbatch -A your_allocation -o slurm_output.log -p partition_name -t time_limit --array job_array -c num_cpus --gres gpu:num_gpus --mem memory_size --nodes num_nodes run_train_vars.sh
+sbatch -A plgzzsn2024-gpu-a100 -o slurm_%a.log -p plgrid-gpu-a100 -t 360 -c 4 --gres gpu:1 --mem 40G --nodes 1 run_train_vars.sh 
 ```
 
 Replace placeholders with actual values:
@@ -66,8 +68,9 @@ Replace placeholders with actual values:
 #### Example
 Here is an example of a job submission command that was used based on the bash history:
 ```bash
-sbatch -A plgzzsn2024-gpu-a100 -o slurm_%a.log -p plgrid-gpu-a100 -t 360 --array 0-19 -c 4 --gres gpu:1 --mem 40G --nodes 1 run_train_vars.sh
+sbatch -A plgzzsn2024-gpu-a100 -o slurm_%a.log -p plgrid-gpu-a100 -t 360 --array 0-1 -c 4 --gres gpu:1 --mem 40G --nodes 1 run_train_vars.sh
 ```
+TODO^ uruchamiane z pliku sbatch.sh
 
 This command submits a job to the Slurm scheduler with the following specifications:
 - Allocation ID: `plgzzsn2024-gpu-a100`
@@ -85,19 +88,14 @@ This command submits a job to the Slurm scheduler with the following specificati
 #### Viewing Jobs
 To view all your submitted jobs, use:
 ```bash
-squeue -u your_username
-```
-
-Example:
-```bash
-squeue -u plgmiloszl
+squeue -u $USER
 ```
 
 #### Cancelling Jobs
 To cancel a specific job or all your jobs:
 ```bash
 scancel job_id  # Replace 'job_id' with your specific job ID
-scancel -u your_username  # Cancels all your jobs
+scancel -u $USER  # Cancels all your jobs
 ```
 
 #### Modifying Jobs

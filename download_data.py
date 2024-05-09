@@ -3,7 +3,11 @@ from dotenv import load_dotenv, find_dotenv
 import os
 import zipfile
 
-output_path = "/net/tscratch/people/plgmiloszl/data"
+# Get the current username
+username = os.environ['USER']
+
+# Use the username to construct paths
+output_path = f"/net/tscratch/people/{username}/data"
 
 def unzip_file(zip_file, extract_to):
     with zipfile.ZipFile(zip_file, 'r') as zip_ref:
