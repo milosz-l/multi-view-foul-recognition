@@ -77,7 +77,7 @@ export WANDB_CACHE_DIR=/net/tscratch/people/$USER/.cache/wandb
 ### Step 6: Submitting jobs to Slurm
 To run experiments using the Slurm job scheduler, you can submit jobs as follows. Adjust the script and resource specifications according to your needs:
 ```bash
-sbatch -A plgzzsn2024-gpu-a100 -o slurm_%a.log -p plgrid-gpu-a100 -t 360 -c 4 --gres gpu:1 --mem 40G --nodes 1 run_train_vars.sh 
+sbatch -A plgzzsn2024-gpu-a100 -o slurm_%a.log -p plgrid-gpu-a100 -t 360 -c 4 --gres gpu:1 --mem 40G --nodes 1 run_train_vars.sh
 ```
 
 Replace placeholders with actual values:
@@ -98,17 +98,6 @@ source sbatch.sh
 <!-- ```bash
 sbatch -A plgzzsn2024-gpu-a100 -o slurm_%a.log -p plgrid-gpu-a100 -t 360 --array 0-1 -c 4 --gres gpu:1 --mem 40G --nodes 1 run_train_vars.sh
 ``` -->
-
-This command submits a job to the Slurm scheduler with the following specifications:
-- Allocation ID: `plgzzsn2024-gpu-a100`
-- Output log file: `slurm_%a.log` (where `%a` is replaced by the array job ID)
-- Partition: `plgrid-gpu-a100`
-- Time limit: `360` minutes
-- Job array: `0-19` (20 jobs in total)
-- CPUs per job: `4`
-- GPUs per job: `1`
-- Memory per job: `40G`
-- Number of nodes per job: `1`
 
 ### Managing Slurm Jobs
 
