@@ -58,6 +58,11 @@ ls /net/tscratch/people/$USER/
 ```
 
 ### Step 4: Download data
+Make sure that you created the .env file with the SoccerNet password given in the following format:
+```
+SNDL_PASSWORD="123"
+```
+
 Run `download_data.sh` to download the data.
 ```bash
 source download_data.sh

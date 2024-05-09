@@ -16,4 +16,4 @@ fi
 export NCCL_DEBUG=INFO
 export PYTHONFAULTHANDLER=1
 
-srun python3 download_data.py
+python3 download_data.py
