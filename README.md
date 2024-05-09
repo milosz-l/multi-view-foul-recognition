@@ -5,19 +5,27 @@
 pandoc koncepcja.md -s -o koncepcja.pdf -V colorlinks=true
 ```
 
-## Running experiments on Athena
+## Running experiments on Athena (first log in)
 
-### Download data
-Run `download_data.py` to download the data.
+### Step 1: Choosing right folder
+In home directory for each user there is only 10GB of space. It is advised to run experiments from scratch directory (there is risk of data loss, but the risk is low and the experiments are stored in wandb anyway).
 
-### Activate Python virtual environment
+So after logging to plgrid, go to scratch directory and clone the project from git.
+```bash
+cd /net/tscratch/people/$USER/
+git clone git@github.com:milosz-l/multi-view-foul-recognition.git
+cd multi-view-foul-recognition
+```
+
+
+### Step 2: Activate Python virtual environment
 To ensure that all dependencies are correctly managed and isolated, activate the Python virtual environment using the following commands:
 ```bash
 python3.9 -m venv /net/tscratch/people/$USER/.venv
 source /net/tscratch/people/$USER/.venv/bin/activate
 ```
 
-### Installing Requirements
+### Step 3: Installing Requirements
 Before running experiments, it's essential to install all required Python packages. This includes general dependencies listed in a `requirements.txt` file, if available, and specific GPU-accelerated libraries for PyTorch.
 #### General Dependencies
 To install the general dependencies, ensure you are in the activated virtual environment and run:
@@ -38,18 +46,24 @@ pip3 install torch torchvision torchaudio --index-url https://download.pytorch.o
 
 Ensure that the CUDA version (`cu118` in this case) matches the CUDA version installed on your system or the one available in the cluster environment.
 
-### Deactivating environments
+### (Optional) Deactivating environments
 ```bash
 deactivate  # For Python venv
 ```
 
-### Check available storage
+### (Optional) Check available storage
 Since the home directory is limited to 10GB, it's important to use the temporary storage directory for larger datasets or outputs. Check the contents and available space using:
 ```bash
 ls /net/tscratch/people/$USER/
 ```
 
-### Submitting jobs to Slurm
+### Step 4: Download data
+Run `download_data.sh` to download the data.
+```bash
+source download_data.sh
+```
+
+### Step 5: Submitting jobs to Slurm
 To run experiments using the Slurm job scheduler, you can submit jobs as follows. Adjust the script and resource specifications according to your needs:
 ```bash
 sbatch -A plgzzsn2024-gpu-a100 -o slurm_%a.log -p plgrid-gpu-a100 -t 360 -c 4 --gres gpu:1 --mem 40G --nodes 1 run_train_vars.sh 
@@ -111,3 +125,10 @@ scontrol update JobId=job_id AttributeName=new_value  # Replace 'AttributeName' 
 - **hpc-fs**: Manages and inspects the HPC file system. Usage: `hpc-fs`.
 - **hpc-jobs**: Manages and views the status of HPC jobs. Usage: `hpc-jobs`.
 - **du**: Estimates file space usage. Usage: `du -h --max-depth=1 $HOME | sort -rh`.
+
+## Running experiments on Athena (after the first log in)
+You only need these to run experiments:
+```bash
+cd /net/tscratch/people/$USER/multi-view-foul-recognition
+source sbatch.sh
+```
