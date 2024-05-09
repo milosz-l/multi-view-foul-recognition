@@ -68,9 +68,11 @@ Replace placeholders with actual values:
 #### Example
 Here is an example of a job submission command that was used based on the bash history:
 ```bash
-sbatch -A plgzzsn2024-gpu-a100 -o slurm_%a.log -p plgrid-gpu-a100 -t 360 --array 0-1 -c 4 --gres gpu:1 --mem 40G --nodes 1 run_train_vars.sh
+source sbatch.sh
 ```
-TODO^ uruchamiane z pliku sbatch.sh
+<!-- ```bash
+sbatch -A plgzzsn2024-gpu-a100 -o slurm_%a.log -p plgrid-gpu-a100 -t 360 --array 0-1 -c 4 --gres gpu:1 --mem 40G --nodes 1 run_train_vars.sh
+``` -->
 
 This command submits a job to the Slurm scheduler with the following specifications:
 - Allocation ID: `plgzzsn2024-gpu-a100`
