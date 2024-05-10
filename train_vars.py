@@ -22,13 +22,13 @@ wandb.login()
 
 torch.cuda.empty_cache()
 
-num_epochs = 20
+num_epochs = 2
 start_frame = 0
 end_frame = 115
 fps = 25
 num_views = 5
 pre_model = "s3d"
-max_num_worker = 3
+max_num_worker = 128
 batch_size = 4
 data_aug = False
 pooling_type = 'max'
