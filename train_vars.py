@@ -28,7 +28,10 @@ end_frame = 115
 fps = 25
 num_views = 5
 pre_model = "s3d"
-max_num_worker = 4
+max_num_worker_train = 3
+max_num_worker_val = 3
+max_num_worker_test = 3
+max_num_worker_chall = 0
 batch_size = 4
 data_aug = False
 pooling_type = 'max'
@@ -40,7 +43,7 @@ weighted_loss = False
 data_aug = False
 
 training_config = TrainingConfig(start_frame=start_frame, end_frame=end_frame, fps=fps, num_views = num_views, pre_model = pre_model,
-                                 max_num_worker=max_num_worker, batch_size=batch_size, data_aug=data_aug, pooling_type=pooling_type, 
+                                 max_num_worker=max_num_worker_train, batch_size=batch_size, data_aug=data_aug, pooling_type=pooling_type, 
                                  weight_decay=weight_decay, step_size=step_size, gamma=gamma, LR=LR, weighted_loss=weighted_loss)
 
 
@@ -67,8 +70,8 @@ train_size = int(0.7 * len(dataset_Train))
 val_size = len(dataset_Train) - train_size
 
 train_set, val_set = random_split(dataset_Train, [train_size, val_size])
-train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=max_num_worker, pin_memory=True)
-val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False, num_workers=max_num_worker, pin_memory=True) 
+train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=max_num_worker_train, pin_memory=True)
+val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False, num_workers=max_num_worker_val, pin_memory=True) 
 
 dataset_Test = MultiViewDataset(path=path, start=start_frame, end=end_frame, fps=fps, split='Test', num_views = 5, 
 transform_model=transforms_model)
@@ -79,11 +82,11 @@ dataset_Chall = MultiViewDataset(path=path, start=start_frame, end=end_frame, fp
 
 test_loader = torch.utils.data.DataLoader(dataset_Test,
             batch_size=1, shuffle=False,
-            num_workers=max_num_worker, pin_memory=True)
+            num_workers=max_num_worker_test, pin_memory=True)
         
 chall_loader = torch.utils.data.DataLoader(dataset_Chall,
             batch_size=1, shuffle=False,
-            num_workers=max_num_worker, pin_memory=True)
+            num_workers=max_num_worker_chall, pin_memory=False)
 
 criterion = get_criterion(weighted_loss, dataset_train=dataset_Train)
 model = LitMVNNetwork(pre_model=pre_model, pooling_type=pooling_type, criterion=criterion, config=training_config)
