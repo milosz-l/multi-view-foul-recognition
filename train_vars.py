@@ -22,7 +22,7 @@ wandb.login()
 
 torch.cuda.empty_cache()
 
-num_epochs = 2
+num_epochs = 40
 start_frame = 0
 end_frame = 115
 fps = 25
@@ -40,7 +40,7 @@ step_size = 3
 gamma = 0.1
 LR = 0.01
 weighted_loss = False
-data_aug = False
+data_aug = True
 
 training_config = TrainingConfig(start_frame=start_frame, end_frame=end_frame, fps=fps, num_views = num_views, pre_model = pre_model,
                                  max_num_worker=max_num_worker_train, batch_size=batch_size, data_aug=data_aug, pooling_type=pooling_type, 
