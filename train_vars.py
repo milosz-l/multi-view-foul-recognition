@@ -30,7 +30,7 @@ num_views = 5
 pre_model = "s3d"
 max_num_worker_train = 4
 max_num_worker_val = 4
-max_num_worker_test = 3
+max_num_worker_test = 0
 max_num_worker_chall = 0
 batch_size = 4
 data_aug = False
@@ -39,7 +39,7 @@ weight_decay = 0.001
 step_size = 3
 gamma = 0.1
 LR = 0.01
-weighted_loss = False
+weighted_loss = True
 data_aug = True
 
 training_config = TrainingConfig(start_frame=start_frame, end_frame=end_frame, fps=fps, num_views = num_views, pre_model = pre_model,
@@ -82,7 +82,7 @@ dataset_Chall = MultiViewDataset(path=path, start=start_frame, end=end_frame, fp
 
 test_loader = torch.utils.data.DataLoader(dataset_Test,
             batch_size=1, shuffle=False,
-            num_workers=max_num_worker_test, pin_memory=True)
+            num_workers=max_num_worker_test, pin_memory=False)
         
 chall_loader = torch.utils.data.DataLoader(dataset_Chall,
             batch_size=1, shuffle=False,
