@@ -22,7 +22,7 @@ wandb.login()
 
 torch.cuda.empty_cache()
 
-num_epochs = 40
+num_epochs = 10
 start_frame = 0
 end_frame = 115
 fps = 25
