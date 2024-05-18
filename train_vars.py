@@ -1,22 +1,20 @@
+import os
+from datetime import datetime
+
 import lightning as L
 import torch
-import os
-
-
+from lightning.pytorch.callbacks import ModelCheckpoint
+from lightning.pytorch.loggers import WandbLogger
 from SoccerNet.Evaluation.MV_FoulRecognition import evaluate
 from torch.utils.data import DataLoader, random_split
 
-from src.training import TrainingConfig
-from src.dataset import MultiViewDataset
-from src.model import LitMVNNetwork, get_pre_model
-from src.loss import get_criterion
-from src.eval import save_evaluation_file
-from datetime import datetime
-import os
-from src.augment import get_augmentation
 import wandb
-from lightning.pytorch.loggers import WandbLogger
-from lightning.pytorch.callbacks import ModelCheckpoint
+from src.augment import get_augmentation
+from src.dataset import MultiViewDataset
+from src.eval import save_evaluation_file
+from src.loss import get_criterion
+from src.model import LitMVNNetwork, get_pre_model
+from src.training import TrainingConfig
 
 wandb.login()
 
@@ -42,8 +40,8 @@ LR = 0.01
 weighted_loss = True
 data_aug = True
 
-training_config = TrainingConfig(start_frame=start_frame, end_frame=end_frame, fps=fps, num_views = num_views, pre_model = pre_model,
-                                 max_num_worker=max_num_worker_train, batch_size=batch_size, data_aug=data_aug, pooling_type=pooling_type, 
+training_config = TrainingConfig(start_frame=start_frame, end_frame=end_frame, fps=fps, num_views=num_views, pre_model=pre_model,
+                                 max_num_worker=max_num_worker_train, batch_size=batch_size, data_aug=data_aug, pooling_type=pooling_type,
                                  weight_decay=weight_decay, step_size=step_size, gamma=gamma, LR=LR, weighted_loss=weighted_loss)
 
 
@@ -70,46 +68,55 @@ train_size = int(0.7 * len(dataset_Train))
 val_size = len(dataset_Train) - train_size
 
 train_set, val_set = random_split(dataset_Train, [train_size, val_size])
-train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=max_num_worker_train, pin_memory=True)
-val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False, num_workers=max_num_worker_val, pin_memory=True) 
+train_loader = DataLoader(train_set, batch_size=batch_size,
+                          shuffle=True, num_workers=max_num_worker_train, pin_memory=True)
+val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False,
+                        num_workers=max_num_worker_val, pin_memory=True)
 
-dataset_Test = MultiViewDataset(path=path, start=start_frame, end=end_frame, fps=fps, split='Test', num_views = 5, 
-transform_model=transforms_model)
+dataset_Test = MultiViewDataset(path=path, start=start_frame, end=end_frame, fps=fps, split='Test', num_views=5,
+                                transform_model=transforms_model)
 
 
-dataset_Chall = MultiViewDataset(path=path, start=start_frame, end=end_frame, fps=fps, split='Chall', num_views = 5, 
-        transform_model=transforms_model)
+dataset_Chall = MultiViewDataset(path=path, start=start_frame, end=end_frame, fps=fps, split='Chall', num_views=5,
+                                 transform_model=transforms_model)
 
 test_loader = torch.utils.data.DataLoader(dataset_Test,
-            batch_size=1, shuffle=False,
-            num_workers=max_num_worker_test, pin_memory=False)
-        
+                                          batch_size=1, shuffle=False,
+                                          num_workers=max_num_worker_test, pin_memory=False)
+
 chall_loader = torch.utils.data.DataLoader(dataset_Chall,
-            batch_size=1, shuffle=False,
-            num_workers=max_num_worker_chall, pin_memory=False)
+                                           batch_size=1, shuffle=False,
+                                           num_workers=max_num_worker_chall, pin_memory=False)
 
 criterion = get_criterion(weighted_loss, dataset_train=dataset_Train)
-model = LitMVNNetwork(pre_model=pre_model, pooling_type=pooling_type, criterion=criterion, config=training_config)
+model = LitMVNNetwork(pre_model=pre_model, pooling_type=pooling_type,
+                      criterion=criterion, config=training_config)
 job_id = str(datetime.now())
 wand_logger = WandbLogger(log_model="all")
 
 os.makedirs(f"/net/tscratch/people/{username}/lightning_logs", exist_ok=True)
 
 
-checkpoint_callback = ModelCheckpoint(dirpath=f"/net/tscratch/people/{username}/lightning_log")
+checkpoint_callback = ModelCheckpoint(
+    dirpath=f"/net/tscratch/people/{username}/lightning_log")
 
-trainer = L.Trainer(max_epochs=num_epochs, logger=wand_logger, strategy="ddp", num_nodes=1, default_root_dir=f"/net/tscratch/people/{username}/lightning_log")
-trainer.fit(model=model, train_dataloaders=train_loader, val_dataloaders=val_loader)
+trainer = L.Trainer(max_epochs=num_epochs, logger=wand_logger, strategy="ddp",
+                    num_nodes=1, default_root_dir=f"/net/tscratch/people/{username}/lightning_log")
+trainer.fit(model=model, train_dataloaders=train_loader,
+            val_dataloaders=val_loader)
 
 os.makedirs(predictions_output_dir, exist_ok=True)
 
 test_set = f"test_{job_id}"
 chall_set = f"chall_{job_id}"
 
-test_prediction_file = save_evaluation_file(test_loader, model=model, set_name=test_set, output_dir=predictions_output_dir)
-chall_prediction_file = save_evaluation_file(chall_loader, model=model, set_name=chall_set, output_dir=predictions_output_dir)
+test_prediction_file = save_evaluation_file(
+    test_loader, model=model, set_name=test_set, output_dir=predictions_output_dir)
+chall_prediction_file = save_evaluation_file(
+    chall_loader, model=model, set_name=chall_set, output_dir=predictions_output_dir)
 
-test_results = evaluate(os.path.join(path, "Test", "annotations.json"), test_prediction_file)
+test_results = evaluate(os.path.join(
+    path, "Test", "annotations.json"), test_prediction_file)
 wandb.log(test_results)
 
 wandb.finish()

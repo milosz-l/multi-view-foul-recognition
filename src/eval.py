@@ -1,27 +1,30 @@
-from src.config import INVERSE_EVENT_DICTIONARY
-import torch
-import pytorch_lightning as L
-import os
-import json
 import gc
-from tqdm import tqdm
+import json
+import os
 from typing import Union
 
+import pytorch_lightning as L
+import torch
+from tqdm import tqdm
+
+from src.config import INVERSE_EVENT_DICTIONARY
+
+
 def save_evaluation_file(dataloader,
-          model: Union[torch.nn.Module, L.LightningModule],
-          set_name="test",
-          output_dir="."
-        ):
-    
+                         model: Union[torch.nn.Module, L.LightningModule],
+                         set_name="test",
+                         output_dir="."
+                         ):
 
     model.eval()
 
-    prediction_file = os.path.join(output_dir, "predicitions_" + set_name + ".json")
+    prediction_file = os.path.join(
+        output_dir, "predicitions_" + set_name + ".json")
     data = {}
     data["Set"] = set_name
 
     actions = {}
-           
+
     for _, _, mvclips, action in tqdm(dataloader):
 
         mvclips = mvclips.cuda().float()
@@ -45,9 +48,10 @@ def save_evaluation_file(dataloader,
             elif preds_sev.item() == 3:
                 values["Offence"] = "Offence"
                 values["Severity"] = "5.0"
-            actions[action[0]] = values       
+            actions[action[0]] = values
         else:
-            preds_sev = torch.argmax(outputs_offence_severity.detach().cpu(), 1)
+            preds_sev = torch.argmax(
+                outputs_offence_severity.detach().cpu(), 1)
             preds_act = torch.argmax(outputs_action.detach().cpu(), 1)
 
             for i in range(len(action)):
@@ -65,14 +69,13 @@ def save_evaluation_file(dataloader,
                 elif preds_sev[i].item() == 3:
                     values["Offence"] = "Offence"
                     values["Severity"] = "5.0"
-                actions[action[i]] = values                    
-
+                actions[action[i]] = values
 
         gc.collect()
         torch.cuda.empty_cache()
-    
+
     data["Actions"] = actions
 
-    with open(prediction_file, "w") as outfile: 
-        json.dump(data, outfile)  
+    with open(prediction_file, "w") as outfile:
+        json.dump(data, outfile)
     return prediction_file

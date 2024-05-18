@@ -3,9 +3,10 @@ import random
 import torch
 from torch.utils.data import Dataset
 from torchvision.io.video import read_video
+from tqdm import tqdm
 
 from src.utils import clips2vectormerge, label2vectormerge
-from tqdm import tqdm
+
 
 class MultiViewDataset(Dataset):
     def __init__(self, path, start, end, fps, split, num_views, transform=None, transform_model=None):
@@ -179,7 +180,7 @@ class MultiViewDatasetCached(Dataset):
         self.factor = (end - start) / (((end - start) / 25) * fps)
 
         self.length = len(self.clips)
-        
+
         self.batches = []
 
         for index in tqdm(range(self.length)):
@@ -190,7 +191,6 @@ class MultiViewDatasetCached(Dataset):
 
     def getWeights(self):
         return self.weights_offence_severity, self.weights_action,
-
 
     def extract_batch(self, index):
         prev_views = []
