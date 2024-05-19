@@ -21,6 +21,7 @@ class LitMVNNetwork(L.LightningModule):
         self.weight_decay = config.weight_decay
         self.step_size = config.step_size
         self.gamma = config.gamma
+        self.batch_size = config.batch_size
 
         self.criterion = criterion
         self.actions = {}
@@ -47,8 +48,8 @@ class LitMVNNetwork(L.LightningModule):
 
         loss = calculate_loss(self.criterion, outputs_offence_severity,
                               outputs_action, targets_offence_severity, targets_action)
-        self.log("train_step_loss", loss.item(), on_step=True, on_epoch=False, prog_bar=False, logger=True)
-        self.log("train_epoch_loss", loss.item(), on_step=False, on_epoch=True, prog_bar=False, logger=True)
+        self.log("train_step_loss", loss.item(), on_step=True, on_epoch=False, prog_bar=False, logger=True, batch_size=self.batch_size)
+        self.log("train_epoch_loss", loss.item(), on_step=False, on_epoch=True, prog_bar=False, logger=True, batch_size=self.batch_size)
         return loss
     
     def forward(self, mvclips: torch.Tensor) -> torch.Any:
@@ -70,8 +71,8 @@ class LitMVNNetwork(L.LightningModule):
 
         loss = calculate_loss(self.criterion, outputs_offence_severity,
                               outputs_action, targets_offence_severity, targets_action)
-        self.log("val_step_loss", loss.item(), on_step=True, on_epoch=False, prog_bar=True, logger=True)
-        self.log("val_epoch_loss", loss.item(), on_step=False, on_epoch=True, prog_bar=True, logger=True)
+        self.log("val_step_loss", loss.item(), on_step=True, on_epoch=False, prog_bar=True, logger=True, batch_size=self.batch_size)
+        self.log("val_epoch_loss", loss.item(), on_step=False, on_epoch=True, prog_bar=True, logger=True, batch_size=self.batch_size)
         return loss
 
 def get_pre_model(pre_model: Literal["r3d_18", "s3d", "mc3_18", "r2plus1d_18", "mvit_v2_s"]):

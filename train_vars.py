@@ -18,11 +18,10 @@ import wandb
 from lightning.pytorch.loggers import WandbLogger
 from lightning.pytorch.callbacks import ModelCheckpoint
 
-wandb.login()
-
 torch.cuda.empty_cache()
+torch.set_float32_matmul_precision('medium')
 
-num_epochs = 10
+num_epochs = 2
 start_frame = 0
 end_frame = 115
 fps = 25
@@ -45,12 +44,6 @@ data_aug = True
 training_config = TrainingConfig(start_frame=start_frame, end_frame=end_frame, fps=fps, num_views = num_views, pre_model = pre_model,
                                  max_num_worker=max_num_worker_train, batch_size=batch_size, data_aug=data_aug, pooling_type=pooling_type, 
                                  weight_decay=weight_decay, step_size=step_size, gamma=gamma, LR=LR, weighted_loss=weighted_loss)
-
-
-wandb.init(
-    project="ZZSN multi-view-foul-recognition",
-    config=training_config.model_dump()
-)
 
 # Get the current username
 username = os.environ['USER']
@@ -91,14 +84,15 @@ chall_loader = torch.utils.data.DataLoader(dataset_Chall,
 criterion = get_criterion(weighted_loss, dataset_train=dataset_Train)
 model = LitMVNNetwork(pre_model=pre_model, pooling_type=pooling_type, criterion=criterion, config=training_config)
 job_id = str(datetime.now())
-wand_logger = WandbLogger(log_model="all")
+wandb.finish()
+wand_logger = WandbLogger(project="ZZSN multi-view-foul-recognition", config=training_config.model_dump(), log_model="all")
 
 os.makedirs(f"/net/tscratch/people/{username}/lightning_logs", exist_ok=True)
 
 
 checkpoint_callback = ModelCheckpoint(dirpath=f"/net/tscratch/people/{username}/lightning_log")
 
-trainer = L.Trainer(max_epochs=num_epochs, logger=wand_logger, strategy="ddp", num_nodes=1, default_root_dir=f"/net/tscratch/people/{username}/lightning_log")
+trainer = L.Trainer(max_epochs=num_epochs, logger=wand_logger, num_nodes=1, default_root_dir=f"/net/tscratch/people/{username}/lightning_log")
 trainer.fit(model=model, train_dataloaders=train_loader, val_dataloaders=val_loader)
 
 os.makedirs(predictions_output_dir, exist_ok=True)

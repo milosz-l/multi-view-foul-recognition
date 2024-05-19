@@ -53,7 +53,7 @@ class MultiViewDataset(Dataset):
         self.factor = (end - start) / (((end - start) / 25) * fps)
 
         self.length = len(self.clips)
-        print(self.length)
+        print(f"dataset length: {self.length}")
 
     def getDistribution(self):
         return self.distribution_offence_severity, self.distribution_action,
@@ -92,7 +92,7 @@ class MultiViewDataset(Dataset):
                 prev_views.append(index_view)
 
             video, _, _ = read_video(
-                self.clips[index][index_view], output_format="THWC")
+                self.clips[index][index_view], output_format="THWC", pts_unit="sec")
             frames = video[self.start:self.end, :, :, :]
 
             final_frames = None
@@ -214,7 +214,7 @@ class MultiViewDatasetCached(Dataset):
                 prev_views.append(index_view)
 
             video, _, _ = read_video(
-                self.clips[index][index_view], output_format="THWC")
+                self.clips[index][index_view], output_format="THWC", pts_unit="sec")
             frames = video[self.start:self.end, :, :, :]
 
             final_frames = None
