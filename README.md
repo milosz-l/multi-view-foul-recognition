@@ -8,7 +8,7 @@ pandoc koncepcja.md -s -o koncepcja.pdf -V colorlinks=true
 ## Submitting predictions to Soccernet evalai challange - example
 ```bash
 source /net/tscratch/people/$USER/.venv/bin/activate
-evalai challenge 2201 phase 4380 submit --file "outputs/predicitions_test_2024-05-15 22:16:34.024181.json"  --large --public
+evalai challenge 2201 phase 4380 submit --file "/net/tscratch/people/plgmiloszl/outputs/predicitions_test_2024-05-19 18:51:29.542772.json"  --large --public
 ```
 
 ## Running experiments on Athena (first log in)

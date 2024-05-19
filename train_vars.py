@@ -26,7 +26,7 @@ start_frame = 0
 end_frame = 115
 fps = 25
 num_views = 5
-pre_model = "s3d"
+pre_model = "r2plus1d_18"
 max_num_worker_train = 4
 max_num_worker_val = 4
 max_num_worker_test = 0
@@ -100,7 +100,9 @@ os.makedirs(predictions_output_dir, exist_ok=True)
 test_set = f"test_{job_id}"
 chall_set = f"chall_{job_id}"
 
+torch.cuda.empty_cache()
 test_prediction_file = save_evaluation_file(test_loader, model=model, set_name=test_set, output_dir=predictions_output_dir)
+torch.cuda.empty_cache()
 chall_prediction_file = save_evaluation_file(chall_loader, model=model, set_name=chall_set, output_dir=predictions_output_dir)
 
 test_results = evaluate(os.path.join(path, "Test", "annotations.json"), test_prediction_file)
