@@ -21,12 +21,12 @@ from lightning.pytorch.callbacks import ModelCheckpoint
 torch.cuda.empty_cache()
 torch.set_float32_matmul_precision('medium')
 
-num_epochs = 2
+num_epochs = 10
 start_frame = 0
 end_frame = 115
 fps = 25
 num_views = 5
-pre_model = "r2plus1d_18"
+pre_model = "r3d_18"
 max_num_worker_train = 4
 max_num_worker_val = 4
 max_num_worker_test = 0
@@ -37,7 +37,7 @@ pooling_type = 'max'
 weight_decay = 0.001
 step_size = 3
 gamma = 0.1
-LR = 0.01
+LR = 0.1
 weighted_loss = True
 data_aug = True
 

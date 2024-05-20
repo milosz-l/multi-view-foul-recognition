@@ -16,4 +16,7 @@ fi
 export NCCL_DEBUG=INFO
 export PYTHONFAULTHANDLER=1
 
+# Set the wandb cache directory to tscratch
+export WANDB_CACHE_DIR=/net/tscratch/people/$USER/.cache/wandb
+
 srun python3 train_vars.py
