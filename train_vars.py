@@ -23,7 +23,7 @@ torch.set_float32_matmul_precision('medium')
 
 num_epochs = 2
 start_frame = 0
-end_frame = 125
+end_frame = 115
 fps = 25
 num_views = 5
 pre_model = "r2plus1d_18"
