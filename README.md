@@ -139,3 +139,21 @@ cd /net/tscratch/people/$USER/multi-view-foul-recognition
 export WANDB_CACHE_DIR=/net/tscratch/people/$USER/.cache/wandb
 source sbatch.sh
 ```
+
+
+# Additional: Running vanilla VARS
+Example for running tests in `VARS_test` directory:
+```bash
+cd /net/tscratch/people/$USER/VARS_test
+python3.9 -m venv vars
+source /net/tscratch/people/$USER/VARS_test/vars/bin/activate
+source /net/tscratch/people/$USER/multi-view-foul-recognition/install_gpu_cuda.sh
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+pip install SoccerNet
+```
+
+Create a file with [these](https://github.com/SoccerNet/sn-mvfoul/blob/main/VARS%20model/requirements.txt) requirements and install them:
+```
+pip install -r requirements.txt
+pip install pyav
+```
