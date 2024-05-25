@@ -38,7 +38,7 @@ weight_decay = 0.001
 step_size = 3
 gamma = 0.1
 LR = 1e-04
-weighted_loss = True   # "Yes" or anything else
+weighted_loss = "Yes"   # "Yes" or anything else
 data_aug = True         # bool value
 
 training_config = TrainingConfig(start_frame=start_frame, end_frame=end_frame, fps=fps, num_views = num_views, pre_model = pre_model,
