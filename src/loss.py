@@ -9,11 +9,13 @@ from src.config import INVERSE_EVENT_DICTIONARY
 
 def get_criterion(weighted_loss: bool, dataset_train: Dataset):
     if weighted_loss == 'Yes':
+        print("Using weighted loss")
         criterion_offence_severity = nn.CrossEntropyLoss(
             weight=dataset_train.getWeights()[0].cuda())
         criterion_action = nn.CrossEntropyLoss(
             weight=dataset_train.getWeights()[1].cuda())
     else:
+        print("Using unweighted loss")
         criterion_offence_severity = nn.CrossEntropyLoss()
         criterion_action = nn.CrossEntropyLoss()
     criterion = (criterion_offence_severity, criterion_action)

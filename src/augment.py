@@ -2,6 +2,7 @@ import torchvision.transforms as transforms
 
 def get_augmentation(data_aug: bool):
     if data_aug:
+        print("Using data augmentation")
         transformAug = transforms.Compose([
                                         transforms.RandomAffine(
                                             degrees=(0, 0), translate=(0.1, 0.1), scale=(0.9, 1)),
@@ -13,5 +14,7 @@ def get_augmentation(data_aug: bool):
                                         transforms.RandomHorizontalFlip()
                                         ])
     else:
+        print("Not using data augmentation")
         transformAug = None
     return transformAug
+
