@@ -10,7 +10,7 @@ class TrainingConfig(BaseModel):
     max_num_worker: int = 0
     batch_size: int = 2
     data_aug: bool = False
-    pooling_type: Literal['avg', 'max'] = 'max'
+    pooling_type: Literal['avg', 'max', 'attention'] = 'max'
     weight_decay: float = 0.001
     step_size: int = 3
     gamma: float = 0.1
