@@ -22,11 +22,11 @@ torch.cuda.empty_cache()
 torch.set_float32_matmul_precision('medium')
 
 num_epochs = 2
-start_frame = 0
-end_frame = 115
-fps = 25
+start_frame = 63
+end_frame = 87
+fps = 17
 num_views = 5
-pre_model = "r2plus1d_18"
+pre_model = "mvit_v2_s"
 max_num_worker_train = 4
 max_num_worker_val = 4
 max_num_worker_test = 0
