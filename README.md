@@ -166,3 +166,9 @@ python main.py --LR 5e-5 --step_size 3 --gamma 0.3 --pooling_type "attention" --
 ```
 
 you should get similar results.
+
+
+## Compare test predictions from outputs folder
+```bash
+python evaluate_test.py >> leaderboard.csv
+```

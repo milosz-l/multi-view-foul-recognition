@@ -1,0 +1,51 @@
+<class 'numpy.ndarray'>
+Results for predicitions_test_2024-05-09 17:33:08.501442.json:
+{'accuracy_offence_severity': 62.54980079681275, 'accuracy_action': 42.62948207171315, 'balanced_accuracy_offence_severity': 25.0, 'balanced_accuracy_action': 12.5, 'leaderboard_value': 18.75}
+<class 'numpy.ndarray'>
+Results for predicitions_test_2024-05-16 17:42:53.253470.json:
+{'accuracy_offence_severity': 62.54980079681275, 'accuracy_action': 42.62948207171315, 'balanced_accuracy_offence_severity': 25.0, 'balanced_accuracy_action': 12.5, 'leaderboard_value': 18.75}
+<class 'numpy.ndarray'>
+Results for predicitions_test_2024-05-11 22:36:27.292159.json:
+{'accuracy_offence_severity': 62.54980079681275, 'accuracy_action': 42.62948207171315, 'balanced_accuracy_offence_severity': 25.0, 'balanced_accuracy_action': 12.5, 'leaderboard_value': 18.75}
+<class 'numpy.ndarray'>
+Results for predicitions_test_2024-05-26 12:08:04.649767.json:
+{'accuracy_offence_severity': 27.091633466135455, 'accuracy_action': 9.56175298804781, 'balanced_accuracy_offence_severity': 25.0, 'balanced_accuracy_action': 10.714285714285714, 'leaderboard_value': 17.857142857142858}
+<class 'numpy.ndarray'>
+Results for predicitions_test_2024-05-15 22:16:34.024181.json:
+{'accuracy_offence_severity': 62.54980079681275, 'accuracy_action': 42.62948207171315, 'balanced_accuracy_offence_severity': 25.0, 'balanced_accuracy_action': 12.5, 'leaderboard_value': 18.75}
+<class 'numpy.ndarray'>
+Results for predicitions_test_2024-05-21 12:02:39.355211.json:
+{'accuracy_offence_severity': 27.091633466135455, 'accuracy_action': 42.62948207171315, 'balanced_accuracy_offence_severity': 25.0, 'balanced_accuracy_action': 12.5, 'leaderboard_value': 18.75}
+<class 'numpy.ndarray'>
+Results for predicitions_test_2024-05-19 18:51:29.542772.json:
+{'accuracy_offence_severity': 62.54980079681275, 'accuracy_action': 36.254980079681275, 'balanced_accuracy_offence_severity': 25.0, 'balanced_accuracy_action': 12.543468811128017, 'leaderboard_value': 18.771734405564008}
+<class 'numpy.ndarray'>
+Results for predicitions_test_2024-05-19 12:04:13.066055.json:
+{'accuracy_offence_severity': 62.54980079681275, 'accuracy_action': 42.62948207171315, 'balanced_accuracy_offence_severity': 25.0, 'balanced_accuracy_action': 12.5, 'leaderboard_value': 18.75}
+<class 'numpy.ndarray'>
+Results for predicitions_test_2024-05-10 16:28:51.111953.json:
+{'accuracy_offence_severity': 62.54980079681275, 'accuracy_action': 42.62948207171315, 'balanced_accuracy_offence_severity': 25.0, 'balanced_accuracy_action': 12.5, 'leaderboard_value': 18.75}
+<class 'numpy.ndarray'>
+Results for predicitions_test_2024-05-18 12:44:57.652801.json:
+{'accuracy_offence_severity': 62.54980079681275, 'accuracy_action': 42.62948207171315, 'balanced_accuracy_offence_severity': 25.0, 'balanced_accuracy_action': 12.5, 'leaderboard_value': 18.75}
+<class 'numpy.ndarray'>
+Results for predicitions_test_2024-05-25 21:06:18.163657.json:
+{'accuracy_offence_severity': 1.9920318725099602, 'accuracy_action': 2.3904382470119523, 'balanced_accuracy_offence_severity': 25.0, 'balanced_accuracy_action': 12.5, 'leaderboard_value': 18.75}
+<class 'numpy.ndarray'>
+Results for predicitions_test_2024-05-20 19:45:10.400246.json:
+{'accuracy_offence_severity': 62.54980079681275, 'accuracy_action': 42.62948207171315, 'balanced_accuracy_offence_severity': 25.0, 'balanced_accuracy_action': 12.5, 'leaderboard_value': 18.75}
+<class 'numpy.ndarray'>
+Results for predicitions_test_2024-05-26 11:55:49.969037.json:
+{'accuracy_offence_severity': 1.9920318725099602, 'accuracy_action': 4.382470119521913, 'balanced_accuracy_offence_severity': 25.0, 'balanced_accuracy_action': 11.902173913043478, 'leaderboard_value': 18.45108695652174}
+<class 'numpy.ndarray'>
+Results for predicitions_test_2024-05-10 17:18:53.407458.json:
+{'accuracy_offence_severity': 62.54980079681275, 'accuracy_action': 42.62948207171315, 'balanced_accuracy_offence_severity': 25.0, 'balanced_accuracy_action': 12.5, 'leaderboard_value': 18.75}
+<class 'numpy.ndarray'>
+Results for predicitions_test_2024-05-27 11:51:37.953382.json:
+{'accuracy_offence_severity': 27.091633466135455, 'accuracy_action': 4.382470119521913, 'balanced_accuracy_offence_severity': 25.0, 'balanced_accuracy_action': 12.5, 'leaderboard_value': 18.75}
+<class 'numpy.ndarray'>
+Results for predicitions_test_2024-05-11 01:58:33.624921.json:
+{'accuracy_offence_severity': 62.54980079681275, 'accuracy_action': 42.62948207171315, 'balanced_accuracy_offence_severity': 25.0, 'balanced_accuracy_action': 12.5, 'leaderboard_value': 18.75}
+<class 'numpy.ndarray'>
+Results for predicitions_test_2024-05-19 15:37:12.672758.json:
+{'accuracy_offence_severity': 62.54980079681275, 'accuracy_action': 42.62948207171315, 'balanced_accuracy_offence_severity': 25.0, 'balanced_accuracy_action': 12.5, 'leaderboard_value': 18.75}
