@@ -39,6 +39,7 @@ gamma = 0.1
 LR = 1e-04
 weighted_loss = "Yes"   # "Yes" or anything else
 data_aug = True         # bool value
+load_pretrained_model = False
 
 training_config = TrainingConfig(start_frame=start_frame, end_frame=end_frame, fps=fps, num_views = num_views, pre_model = pre_model,
                                  max_num_worker=max_num_worker_train, batch_size=batch_size, data_aug=data_aug, pooling_type=pooling_type, 
@@ -87,11 +88,12 @@ chall_loader = DataLoader(dataset_Chall,
 criterion = get_criterion(weighted_loss, dataset_train=dataset_Train)
 model = LitMVNNetwork(pre_model=pre_model, pooling_type=pooling_type, criterion=criterion, config=training_config).cuda()
 
-# Load pretrained weights if available
-path_to_model_weights = "14_model.pth.tar"
-if os.path.exists(path_to_model_weights):
-    load = torch.load(path_to_model_weights)
-    model.load_state_dict(load['state_dict'])
+if load_pretrained_model:
+    # Load pretrained weights if available
+    path_to_model_weights = "14_model.pth.tar"
+    if os.path.exists(path_to_model_weights):
+        load = torch.load(path_to_model_weights)
+        model.load_state_dict(load['state_dict'])
 
 job_id = str(datetime.now())
 wandb.finish()
