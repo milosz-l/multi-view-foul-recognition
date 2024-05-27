@@ -157,3 +157,12 @@ Create a file with [these](https://github.com/SoccerNet/sn-mvfoul/blob/main/VARS
 pip install -r requirements.txt
 pip install pyav
 ```
+
+## Baseline hyperaparameters
+if you use the code from the GitHub repository and run:
+
+```
+python main.py --LR 5e-5 --step_size 3 --gamma 0.3 --pooling_type "attention" --start_frame 63 --end_frame 87 --fps 17 --path "path/to/dataset" --pre_model "mvit_v2_s"
+```
+
+you should get similar results.
