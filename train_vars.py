@@ -58,12 +58,16 @@ transforms_model = get_pre_model(training_config.pre_model)
 dataset_Train = MultiViewDataset(path=path, start=start_frame, end=end_frame, fps=fps, split='Train',
                                  num_views=5, transform=transform_aug, transform_model=transforms_model)
 
-train_size = int(0.7 * len(dataset_Train))
-val_size = len(dataset_Train) - train_size
+dataset_Valid2 = MultiViewDataset(path=path, start=start_frame, end=end_frame, fps=fps, split='Valid', num_views = 5, 
+    transform_model=transforms_model)
 
-train_set, val_set = random_split(dataset_Train, [train_size, val_size])
-train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=max_num_worker_train, pin_memory=True)
-val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False, num_workers=max_num_worker_val, pin_memory=True) 
+train_loader = torch.utils.data.DataLoader(dataset_Train,
+    batch_size=batch_size, shuffle=True,
+    num_workers=max_num_worker_train, pin_memory=True)
+
+val_loader2 = torch.utils.data.DataLoader(dataset_Valid2,
+    batch_size=1, shuffle=False,
+    num_workers=max_num_worker_val, pin_memory=True)
 
 dataset_Test = MultiViewDataset(path=path, start=start_frame, end=end_frame, fps=fps, split='Test', num_views = 5, 
 transform_model=transforms_model)
@@ -72,16 +76,23 @@ transform_model=transforms_model)
 dataset_Chall = MultiViewDataset(path=path, start=start_frame, end=end_frame, fps=fps, split='Chall', num_views = 5, 
         transform_model=transforms_model)
 
-test_loader = torch.utils.data.DataLoader(dataset_Test,
+test_loader = DataLoader(dataset_Test,
             batch_size=1, shuffle=False,
             num_workers=max_num_worker_test, pin_memory=False)
         
-chall_loader = torch.utils.data.DataLoader(dataset_Chall,
+chall_loader = DataLoader(dataset_Chall,
             batch_size=1, shuffle=False,
             num_workers=max_num_worker_chall, pin_memory=False)
 
 criterion = get_criterion(weighted_loss, dataset_train=dataset_Train)
-model = LitMVNNetwork(pre_model=pre_model, pooling_type=pooling_type, criterion=criterion, config=training_config)
+model = LitMVNNetwork(pre_model=pre_model, pooling_type=pooling_type, criterion=criterion, config=training_config).cuda()
+
+# Load pretrained weights if available
+path_to_model_weights = "14_model.pth.tar"
+if os.path.exists(path_to_model_weights):
+    load = torch.load(path_to_model_weights)
+    model.load_state_dict(load['state_dict'])
+
 job_id = str(datetime.now())
 wandb.finish()
 wand_logger = WandbLogger(project="ZZSN multi-view-foul-recognition", config=training_config.model_dump(), log_model="all")
@@ -92,7 +103,7 @@ os.makedirs(f"/net/tscratch/people/{username}/lightning_logs", exist_ok=True)
 checkpoint_callback = ModelCheckpoint(dirpath=f"/net/tscratch/people/{username}/lightning_log")
 
 trainer = L.Trainer(max_epochs=num_epochs, logger=wand_logger, num_nodes=1, default_root_dir=f"/net/tscratch/people/{username}/lightning_log")
-trainer.fit(model=model, train_dataloaders=train_loader, val_dataloaders=val_loader)
+trainer.fit(model=model, train_dataloaders=train_loader, val_dataloaders=val_loader2)
 
 os.makedirs(predictions_output_dir, exist_ok=True)
 
