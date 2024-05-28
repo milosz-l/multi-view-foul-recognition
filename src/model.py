@@ -6,6 +6,11 @@ from src.loss import calculate_loss, calculate_outputs
 from src.mvnetwork import MVNetwork
 from src.training import TrainingConfig
 
+from SoccerNet.Evaluation.MV_FoulRecognition import evaluate
+from src.eval import save_evaluation_file
+import os
+from datetime import datetime
+
 import torchvision.transforms as transforms
 from torchvision.models.video import (MC3_18_Weights, MViT_V1_B_Weights,
                                       MViT_V2_S_Weights, R2Plus1D_18_Weights,
@@ -13,7 +18,7 @@ from torchvision.models.video import (MC3_18_Weights, MViT_V1_B_Weights,
                                       mvit_v2_s)
 
 class LitMVNNetwork(L.LightningModule):
-    def __init__(self, pre_model, pooling_type, criterion, config: TrainingConfig):
+    def __init__(self, pre_model, pooling_type, criterion, config: TrainingConfig, test_loader):
         super().__init__()
         self.model = MVNetwork(net_name=pre_model, agr_type=pooling_type)
         # TODO - replace with config
@@ -25,6 +30,8 @@ class LitMVNNetwork(L.LightningModule):
 
         self.criterion = criterion
         self.actions = {}
+
+        self.test_loader = test_loader
 
     def configure_optimizers(self):
         optimizer = torch.optim.AdamW(self.model.parameters(), lr=self.LR,
@@ -73,6 +80,16 @@ class LitMVNNetwork(L.LightningModule):
                               outputs_action, targets_offence_severity, targets_action)
         self.log("val_step_loss", loss.item(), on_step=True, on_epoch=False, prog_bar=True, logger=True, batch_size=self.batch_size)
         self.log("val_epoch_loss", loss.item(), on_step=False, on_epoch=True, prog_bar=True, logger=True, batch_size=self.batch_size)
+
+        # log test set leaderboard value
+        datetime = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+        username = os.environ['USER']
+        path = f"/net/tscratch/people/{username}/data"
+        output_filename = f"test_pred_{datetime}_epoch{self.current_epoch}"
+        test_prediction_file = save_evaluation_file(self.test_loader, model=self.model, set_name=output_filename, output_dir=f"/net/tscratch/people/{username}/outputs")
+        test_results = evaluate(os.path.join(path, "Test", "annotations.json"), test_prediction_file)
+        self.log("leaderboard_epoch_value", test_results["leaderboard_value"], on_step=False, on_epoch=True, prog_bar=False, logger=True, batch_size=self.batch_size)
+        
         return loss
 
 def get_pre_model(pre_model: Literal["r3d_18", "s3d", "mc3_18", "r2plus1d_18", "mvit_v2_s"]):

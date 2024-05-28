@@ -21,7 +21,7 @@ from lightning.pytorch.callbacks import ModelCheckpoint
 torch.cuda.empty_cache()
 torch.set_float32_matmul_precision('medium')
 
-num_epochs = 20
+num_epochs = 2
 start_frame = 63
 end_frame = 87
 fps = 17
@@ -86,7 +86,7 @@ chall_loader = DataLoader(dataset_Chall,
             num_workers=max_num_worker_chall, pin_memory=False)
 
 criterion = get_criterion(weighted_loss, dataset_train=dataset_Train)
-model = LitMVNNetwork(pre_model=pre_model, pooling_type=pooling_type, criterion=criterion, config=training_config).cuda()
+model = LitMVNNetwork(pre_model=pre_model, pooling_type=pooling_type, criterion=criterion, config=training_config, test_loader=test_loader).cuda()
 
 if load_pretrained_model:
     # Load pretrained weights if available

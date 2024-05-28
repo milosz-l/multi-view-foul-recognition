@@ -12,6 +12,7 @@ for filename in os.listdir(predictions_dir):
         
         # Evaluate the prediction file
         results = evaluate(annotations_path, file_path)
+        print(f"leaderboard: {results['leaderboard_value']}")
         
         # Print the results
         print(f"Results for {filename}:")
