@@ -80,7 +80,10 @@ class LitMVNNetwork(L.LightningModule):
                               outputs_action, targets_offence_severity, targets_action)
         self.log("val_step_loss", loss.item(), on_step=True, on_epoch=False, prog_bar=True, logger=True, batch_size=self.batch_size)
         self.log("val_epoch_loss", loss.item(), on_step=False, on_epoch=True, prog_bar=True, logger=True, batch_size=self.batch_size)
+        
+        return loss
 
+    def on_validation_epoch_end(self):
         # log test set leaderboard value
         timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
         username = os.environ['USER']
@@ -89,8 +92,6 @@ class LitMVNNetwork(L.LightningModule):
         test_prediction_file = save_evaluation_file(self.test_loader, model=self.model, set_name=output_filename, output_dir=f"/net/tscratch/people/{username}/outputs")
         test_results = evaluate(os.path.join(path, "Test", "annotations.json"), test_prediction_file)
         self.log("leaderboard_epoch_value", test_results["leaderboard_value"], on_step=False, on_epoch=True, prog_bar=False, logger=True, batch_size=self.batch_size)
-        
-        return loss
 
 def get_pre_model(pre_model: Literal["r3d_18", "s3d", "mc3_18", "r2plus1d_18", "mvit_v2_s"]):
     if pre_model == "r3d_18":
