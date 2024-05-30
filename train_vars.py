@@ -21,10 +21,18 @@ from lightning.pytorch.callbacks import ModelCheckpoint
 torch.cuda.empty_cache()
 torch.set_float32_matmul_precision('medium')
 
+# num_epochs = 2
+# start_frame = 41
+# end_frame = 99
+# fps = 17
+# num_views = 5
+# pre_model = "swin3d"
+# max_num_worker_train = 2
+# max_num_worker_val = 2
 num_epochs = 2
 start_frame = 63
 end_frame = 87
-fps = 17
+fps = 15
 num_views = 5
 pre_model = "mvit_v2_s"
 max_num_worker_train = 4

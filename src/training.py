@@ -6,7 +6,7 @@ class TrainingConfig(BaseModel):
     end_frame: int = 64
     fps: int = 25
     num_views: int = 5
-    pre_model: Literal["r3d_18", "s3d", "mc3_18", "r2plus1d_18", "mvit_v2_s"] = "s3d"
+    pre_model: Literal["r3d_18", "s3d", "mc3_18", "r2plus1d_18", "mvit_v2_s", "swin3d"] = "s3d"
     max_num_worker: int = 0
     batch_size: int = 2
     data_aug: bool = False

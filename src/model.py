@@ -15,7 +15,7 @@ import torchvision.transforms as transforms
 from torchvision.models.video import (MC3_18_Weights, MViT_V1_B_Weights,
                                       MViT_V2_S_Weights, R2Plus1D_18_Weights,
                                       R3D_18_Weights, S3D_Weights, mvit_v1_b,
-                                      mvit_v2_s)
+                                      mvit_v2_s, Swin3D_B_Weights)
 
 class LitMVNNetwork(L.LightningModule):
     def __init__(self, pre_model, pooling_type, criterion, config: TrainingConfig, test_loader):
@@ -66,6 +66,7 @@ class LitMVNNetwork(L.LightningModule):
     
     def validation_step(self, batch, batch_idx):
         targets_offence_severity, targets_action, mvclips, action = batch
+        # print(f"mvclips shape: {mvclips.shape}")
         outputs_offence_severity, outputs_action, _ = self.model(mvclips)
         outputs_offence_severity, outputs_action, actions = calculate_outputs(
             outputs_offence_severity, outputs_action, action, self.actions)
@@ -93,7 +94,7 @@ class LitMVNNetwork(L.LightningModule):
         test_results = evaluate(os.path.join(path, "Test", "annotations.json"), test_prediction_file)
         self.log("leaderboard_epoch_value", test_results["leaderboard_value"], on_step=False, on_epoch=True, prog_bar=False, logger=True, batch_size=self.batch_size)
 
-def get_pre_model(pre_model: Literal["r3d_18", "s3d", "mc3_18", "r2plus1d_18", "mvit_v2_s"]):
+def get_pre_model(pre_model: Literal["r3d_18", "s3d", "mc3_18", "r2plus1d_18", "mvit_v2_s", "swin3d"]):
     if pre_model == "r3d_18":
         transforms_model = R3D_18_Weights.KINETICS400_V1.transforms()
     elif pre_model == "s3d":
@@ -104,5 +105,9 @@ def get_pre_model(pre_model: Literal["r3d_18", "s3d", "mc3_18", "r2plus1d_18", "
         transforms_model = R2Plus1D_18_Weights.KINETICS400_V1.transforms()
     elif pre_model == "mvit_v2_s":
         transforms_model = MViT_V2_S_Weights.KINETICS400_V1.transforms()
-    
+    elif pre_model == "swin3d":
+        transforms_model = Swin3D_B_Weights.KINETICS400_IMAGENET22K_V1.transforms()
+    else:
+        raise ValueError(f"Invalid pre-model: {pre_model}")
+
     return transforms_model
