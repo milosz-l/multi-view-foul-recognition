@@ -172,3 +172,41 @@ you should get similar results.
 ```bash
 python evaluate_test.py >> leaderboard.csv
 ```
+
+## Running experiments on vast.ai machine
+
+### Create .env file with password
+```bash
+cd /workspace/multi-view-foul-recognition
+echo "SNDL_PASSWORD=TODO" > .env
+```
+
+### Install requirements
+```bash
+cd /workspace/multi-view-foul-recognition
+mkdir /net/tscratch/people/$USER/multi-view-foul-recognition
+python -m venv /net/tscratch/people/$USER/.venv
+source /net/tscratch/people/$USER/.venv/bin/activate
+pip install -r requirements.txt
+source install_gpu_cuda.sh
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+source download_data.sh
+```
+
+### Login to wandb
+```bash
+wandb login
+```
+
+### Delete wandb and pip cache
+```bash
+rm -rf ~/.cache/wandb
+rm -rf ~/.cache/pip
+```
+
+### Run experiments
+```bash
+cd /workspace/multi-view-foul-recognition
+source /net/tscratch/people/$USER/.venv/bin/activate
+python train_vars.py > "logs/output_$(date +'%Y-%m-%d_%H-%M-%S').log" 2>&1
+```
