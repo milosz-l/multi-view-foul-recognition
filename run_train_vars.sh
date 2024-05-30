@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Use the USER environment variable to construct the path
-VENV_DIR="/net/tscratch/people/$USER/.venv"
+VENV_DIR="/net/tscratch/people/$USER/.venv2"
 ACTIVATE_PATH="$VENV_DIR/bin/activate"
 
 # Check if the virtual environment exists

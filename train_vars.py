@@ -27,8 +27,8 @@ torch.set_float32_matmul_precision('medium')
 # fps = 15
 # num_views = 5
 # pre_model = "swin3d"
-# max_num_worker_train = 1
-# max_num_worker_val = 1
+# max_num_worker_train = 2
+# max_num_worker_val = 2
 num_epochs = 20
 start_frame = 58
 end_frame = 92
@@ -43,7 +43,7 @@ batch_size = 2
 pooling_type = 'attention'
 weight_decay = 0.001
 step_size = 3
-gamma = 0.4
+gamma = 0.5
 LR = 5e-5
 weighted_loss = "Yes"   # "Yes" or anything else
 data_aug = True         # bool value
@@ -94,7 +94,7 @@ chall_loader = DataLoader(dataset_Chall,
             num_workers=max_num_worker_chall, pin_memory=False)
 
 criterion = get_criterion(weighted_loss, dataset_train=dataset_Train)
-model = LitMVNNetwork(pre_model=pre_model, pooling_type=pooling_type, criterion=criterion, config=training_config, test_loader=test_loader).cuda()
+model = LitMVNNetwork(pre_model=pre_model, pooling_type=pooling_type, criterion=criterion, config=training_config, test_loader=test_loader, chall_loader=chall_loader).cuda()
 
 if load_pretrained_model:
     # Load pretrained weights if available
