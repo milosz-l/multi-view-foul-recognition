@@ -12,7 +12,7 @@ def get_augmentation(data_aug: bool):
                                         transforms.RandomHorizontalFlip(),
                                         transforms.GaussianBlur(kernel_size=(5, 9), sigma=(0.1, 5)),
                                         transforms.RandomGrayscale(p=0.05),
-                                        transforms.RandomErasing(p=0.01, scale=(0.02, 0.33), ratio=(0.3, 3.3), value='random'),
+                                        # transforms.RandomErasing(p=0.01, scale=(0.02, 0.33), ratio=(0.3, 3.3), value='random'),
                                         # transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ])
     else:
