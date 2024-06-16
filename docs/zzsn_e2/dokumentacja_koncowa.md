@@ -3,6 +3,7 @@ ZZSN 24L KD - temat nr 5
 Wielozadaniowe rozpoznawanie faulów przy użyciu modelu wykorzystującego wiele widoków
 
 ## Członkowie zespołu
+
 - Adam Górski, 304054
 - Miłosz Łopatto, 305898
 
@@ -41,26 +42,25 @@ Pierwszą częścią architektury jest model wyciągający cechy z klipów wideo
 Kolejną warstwą architektury jest agregator, który łączy ze sobą wyniki z kilku wcześniej wspomnianych enkoderów.
 
 ### Trzecia część architektury - głowica do klasyfikacji wielozadaniowej
-Ostatnia część architektury zwraca prawdopodobieństwa poszczególnych klas dla każdego z zadań. Tutaj na ten moment nie planujemy wprowadzać większych zmian i będziemy chcieli skupić się na optymalizacji dwóch pierwszych 
-części architektury.
+Ostatnia część architektury zwraca prawdopodobieństwa poszczególnych klas dla każdego z zadań.
 
 
 # Przeprowadzone eksperymenty
 
 ### Wykorzystane technologie
-Rozwiązanie zostałe zaimplementowane przy użyciu języka Python 3.10 z użyciem bibliotek PyTorch oraz PyTorch Lightning. Ta biblioteka pozwoliła nam na znaczne oczyszczenie kodu oraz jego strukturyzację z użyciem metod programowania obiektowego. Dodatkowo PyTorch Lightning dobrze integruje się z Slurm-em oraz Weights and Biases, które wykorzystaliśmy do śledzenia eksperymentów.
+Rozwiązanie zostałe zaimplementowane przy użyciu języka Python 3.10 z użyciem bibliotek PyTorch oraz PyTorch Lightning. Ta biblioteka pozwoliła nam na znaczne oczyszczenie kodu oraz jego strukturyzację z użyciem metod programowania obiektowego. Dodatkowo PyTorch Lightning dobrze integruje się ze Slurm-em oraz Weights and Biases, które wykorzystaliśmy do śledzenia eksperymentów.
 
 ### Przetwarzanie danych
 
-#### Liczba klatek na sekundę
-Zaczęliśmy eksperymentowanie z liczbą klatek na sekundę (fps) oraz klatką startową i klatką końcową. Środek nagrań utrzymaliśmy na 75 klatce, ponieważ wtedy przeważnie występuje foul. Eksperymentowaliśmy natomiast z szerokością okna. Zwiększając liczbę klatek mamy więcej musieliśmy zawężyć okno, a zmniejszając liczbę klatek musieliśmy je zawęzić. Przykładowo:
+#### Liczba klatek na sekundę:
+Zaczęliśmy eksperymentowanie z liczbą klatek na sekundę (fps) oraz klatką startową i klatką końcową. Środek nagrań utrzymaliśmy na 75 klatce, ponieważ wtedy przeważnie występuje foul. Eksperymentowaliśmy natomiast z szerokością okna. Zmiana liczby klatek na sekundę wymusza zmianę szerokości okna. Przykładowo:
 
 - dla 12 klatek na sekundę `start_frame` powinno zostać ustawione na 58, a `end_frame` na 92. Wtedy model przeanalizuje co drugą klatkę (nagrania są w 24 klatkach na sekundę) i środek będzie się znajdował w 75 klatce,
-- dla 24 klatek na sekundę `start_frame` powinno zostać ustawione na 63, a `end_frame` na 87. Wtedy model przeanalizuje co każdą klatkę, ale okno będzie "węższe", czyli model ma szansę zobaczyć więcej szczegółów na krótszym fragmencie wideo.
+- dla 24 klatek na sekundę `start_frame` powinno zostać ustawione na 63, a `end_frame` na 87. Wtedy model przeanalizuje każdą klatkę, ale okno będzie "węższe", czyli model ma szansę zobaczyć więcej szczegółów na krótszym fragmencie wideo.
 
 Domyślnie `fps` było ustawiona na 17. My jednak zostawiliśmy go na 12, ponieważ dawało nam to najlepsze wyniki.
 
-#### Augmentacja danych
+#### Augmentacja danych:
 Dodatkowo eksperymentowaliśmy także z augmentacją danych. Uzyskiwane przez nas wyniki polepszyło dodanie technik `RandomResizedCrop` oraz `GaussianBlur`. Ostatecznie wyglądało to następująco:
 ```python
 transformAug = transforms.Compose([
@@ -75,8 +75,9 @@ transformAug = transforms.Compose([
 ```
 
 ### Eksperymenty w ramach enkodera
+
 - [x] wykorzystanie innych modeli z biblioteki torchvision
-- [x] wykorzystanie enkoderów opartych na transformerach [1]
+- [x] wykorzystanie enkoderów opartych na transformerach
 
 Ostatecznie najlepszym enkoderem okazał się oparty na transformerze MviTv2. Działał on zdecydowanie lepiej od pozostałych opcji, szczególnie tych opartych na konwolucji.
 
@@ -88,6 +89,7 @@ Eksperymentowaliśmy również z ViViT (Video Vision Transformer) z niestandardo
 
 ### Trenowanie i podział danych
 Używaliśmy obiektu PyTorch Learning Trainer, aby znacznie ułatwić zarządzanie treningiem. Podział danych wyglądał następująco:
+
 - 2915 akcji w zbiorze treningowym
 - 410 akcji w zbiorze walidacyjnym
 - 300 akcji w zbiorze testowym
@@ -122,16 +124,15 @@ Ciekawym pomysłem byłoby przetestowanie architektury Hiera [4].
 
 ### Logi dla najlepszego modelu: `legendary-dream-270`
 
-![Logi dla ostatecznego modelu](../../figures/legendary-dream-270.png)
+![Logi dla ostatecznego modelu. Dokładniej wybrana została wersja modelu z epoki 12 (zaznaczone pionową linią), ponieważ później błąd predykcji na zbiorze walidacyjnym zaczynał rosnąć.](../../figures/legendary-dream-270.png)
 
-![Porównanie logów dla ostatecznego modelu](../../figures/legendary-dream-270-comparison.png)
+![Porównanie logów dla ostatecznego modelu.](../../figures/legendary-dream-270-comparison.png)
 
 
 # Wyniki eksperymentów
 Ostatecznie na zbiorze testowym nasz zespół zdobył trzecie miejsce ze zbalansowaną klasowo celnością dla powagi przewinienia wynoszącą 39.84, zbalansowana celnością dla akcji wynoszącą 45.94 i połączoną metryką 43.68. Dla porównania model bazowy (baseline) miał dla powagi przewinienia 36.25, dla akcji 54.18 i połączoną metrykę 39.60.
-TODO: ^ czy to się zgadza?
 
-![Ranking](../leaderboard.png)
+![Ranking](../../figures/leaderboard.png)
 
 Nasz zespół nazywał się `PW ZZSN`. Chociaż nie udało się uzyskać najlepszego wyniku, to udało się pobić baseline, a na zbiorze testowym niewiele brakowało nam do drugiego miejsca.
 
