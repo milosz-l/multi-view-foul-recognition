@@ -99,8 +99,6 @@ Wykorzystywaliśmy również różne callbacki, takie jak zapisywanie modelu na 
 
 Do uzyskania dobrych wyników niezbędne było także wykorzystanie ważonej funkcji straty.
 
-### Dalsze możliwości rozwoju
-Ciekawym pomysłem byłoby przetestowanie architektury Hiera [4].
 
 ### Hyperparametry dla najlepszego modelu
 ```json
@@ -140,6 +138,8 @@ Nasz zespół nazywał się `PW ZZSN`. Chociaż nie udało się uzyskać najleps
 # Wnioski
 Ze względu na podobieństwo zadań stosowanie do obu jednego modelu znacznie ułatwiło trening oraz poprawiło odporność modelu. Augmentacja też pozwoliła nam lepiej przewidywać próbki ze zbioru ukrytego - często próbki w zbiorze ukrytym reprezentowały bardzo zbliżone klipy, ale przykładowo z kamery z innym naświetleniem lub pod innym kątem. Dodatkowo ze względu na bardzo dużą liczbę zdjęć (klip wideo) ważne jest odpowiednie próbkowanie oraz to, żeby dane testowe na których wykonywana jest inferencja były próbkowane w ten sam sposób co treningowe. Przy długim ciągu danych bardzo efektywną strategią jest także połączenie wyciągania cech danym modelem oraz mechanizm atencji pomiędzy nimi i dopiero do wyjścia dołączona głowica lub głowice atencji. Ze względu na przesadne dopasowanie przydatne też okazały się nam mechanizmy regularyzacji takie jak weight_decay.
 
+# Dalsze możliwości rozwoju
+Ciekawym pomysłem byłoby przetestowanie architektury Hiera [4].
 
 ### Bibliografia
 1. [Held, J., Cioppa, A., Giancola, S., Hamdi, A., Ghanem, B., & Van Droogenbroeck, M. (2023). VARS: Video Assistant Referee System for Automated Soccer Decision Making from Multiple Views.](https://arxiv.org/abs/2304.04617)
