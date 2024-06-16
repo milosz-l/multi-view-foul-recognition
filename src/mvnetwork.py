@@ -3,7 +3,7 @@ from torchvision.models.video import (MC3_18_Weights, MViT_V1_B_Weights,
                                       MViT_V2_S_Weights, R2Plus1D_18_Weights,
                                       R3D_18_Weights, S3D_Weights, mc3_18,
                                       mvit_v1_b, mvit_v2_s, r2plus1d_18,
-                                      r3d_18, s3d)
+                                      r3d_18, s3d, Swin3D_B_Weights, swin3d_b)
 
 from src.aggregate import MVAggregate
 
@@ -35,6 +35,10 @@ class MVNetwork(torch.nn.Module):
         elif net_name == "mvit_v2_s":
             weights_model = MViT_V2_S_Weights.DEFAULT
             network = mvit_v2_s(weights=weights_model)
+            self.feat_dim = 400
+        elif net_name == "swin3d":
+            weights_model = Swin3D_B_Weights.KINETICS400_IMAGENET22K_V1.transforms()
+            network = swin3d_b(weights=weights_model)
             self.feat_dim = 400
         else:
             weights_model = R2Plus1D_18_Weights.DEFAULT

@@ -8,7 +8,7 @@ pandoc koncepcja.md -s -o koncepcja.pdf -V colorlinks=true
 ## Submitting predictions to Soccernet evalai challange - example
 ```bash
 source /net/tscratch/people/$USER/.venv/bin/activate
-evalai challenge 2201 phase 4380 submit --file "outputs/predicitions_test_2024-05-15 22:16:34.024181.json"  --large --public
+evalai challenge 2201 phase 4380 submit --file "/net/tscratch/people/plgmiloszl/outputs/predicitions_test_2024-05-19 18:51:29.542772.json"  --large --public
 ```
 
 ## Running experiments on Athena (first log in)
@@ -138,4 +138,75 @@ You only need these to run experiments:
 cd /net/tscratch/people/$USER/multi-view-foul-recognition
 export WANDB_CACHE_DIR=/net/tscratch/people/$USER/.cache/wandb
 source sbatch.sh
+```
+
+
+# Additional: Running vanilla VARS
+Example for running tests in `VARS_test` directory:
+```bash
+cd /net/tscratch/people/$USER/VARS_test
+python3.9 -m venv vars
+source /net/tscratch/people/$USER/VARS_test/vars/bin/activate
+source /net/tscratch/people/$USER/multi-view-foul-recognition/install_gpu_cuda.sh
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+pip install SoccerNet
+```
+
+Create a file with [these](https://github.com/SoccerNet/sn-mvfoul/blob/main/VARS%20model/requirements.txt) requirements and install them:
+```
+pip install -r requirements.txt
+pip install pyav
+```
+
+## Baseline hyperaparameters
+if you use the code from the GitHub repository and run:
+
+```
+python main.py --LR 5e-5 --step_size 3 --gamma 0.3 --pooling_type "attention" --start_frame 63 --end_frame 87 --fps 17 --path "path/to/dataset" --pre_model "mvit_v2_s"
+```
+
+you should get similar results.
+
+
+## Compare test predictions from outputs folder
+```bash
+python evaluate_test.py >> leaderboard.csv
+```
+
+## Running experiments on vast.ai machine
+
+### Create .env file with password
+```bash
+cd /workspace/multi-view-foul-recognition
+echo "SNDL_PASSWORD=TODO" > .env
+```
+
+### Install requirements
+```bash
+cd /workspace/multi-view-foul-recognition
+mkdir /net/tscratch/people/$USER/multi-view-foul-recognition
+python -m venv /net/tscratch/people/$USER/.venv
+source /net/tscratch/people/$USER/.venv/bin/activate
+pip install -r requirements.txt
+source install_gpu_cuda.sh
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+source download_data.sh
+```
+
+### Login to wandb
+```bash
+wandb login
+```
+
+### Delete wandb and pip cache
+```bash
+rm -rf ~/.cache/wandb
+rm -rf ~/.cache/pip
+```
+
+### Run experiments
+```bash
+cd /workspace/multi-view-foul-recognition
+source /net/tscratch/people/$USER/.venv/bin/activate
+python train_vars.py > "logs/output_$(date +'%Y-%m-%d_%H-%M-%S').log" 2>&1
 ```

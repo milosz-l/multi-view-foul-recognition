@@ -23,13 +23,16 @@ mySNdl = SNdl(LocalDirectory="data")
 mySNdl.downloadDataTask(task="mvfouls", split=["train","valid","test","challenge"], password=sndl_password)
 
 os.makedirs(os.path.join(output_path, "Train"), exist_ok=True)
+os.makedirs(os.path.join(output_path, "Valid"), exist_ok=True)
 os.makedirs(os.path.join(output_path, "Test"), exist_ok=True)
 os.makedirs(os.path.join(output_path, "Chall"), exist_ok=True)
 
 unzip_file('data/mvfouls/train.zip', os.path.join(output_path, "Train"))
+unzip_file('data/mvfouls/valid.zip', os.path.join(output_path, "Valid"))
 unzip_file('data/mvfouls/test.zip', os.path.join(output_path, "Test"))
 unzip_file('data/mvfouls/challenge.zip', os.path.join(output_path, "Chall"))
 
 os.remove('data/mvfouls/train.zip')
+os.remove('data/mvfouls/valid.zip')
 os.remove('data/mvfouls/test.zip')
 os.remove('data/mvfouls/challenge.zip')
