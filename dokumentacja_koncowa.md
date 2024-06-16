@@ -1,9 +1,11 @@
 # Temat projektu
 ZZSN 24L KD - temat nr 5
 Wielozadaniowe rozpoznawanie faulów przy użyciu modelu wykorzystującego wiele widoków
+
 # Członkowie zespołu
 - Adam Górski, 304054
 - Miłosz Łopatto, 305898
+
 # Opis zadania
 Zadanie jest częścią konkursu łączącego piłkę nożną i wizję komputerową [Soccernet: Multi-View Foul Recognition 2024](https://www.soccer-net.org/tasks/new-multi-view-foul-recognition).
 ![](docs/mvfoul.png)
